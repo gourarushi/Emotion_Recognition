@@ -4,6 +4,7 @@ import zipfile
 import requests
 import numpy as np
 from tqdm.auto import tqdm
+from functools import partial
 
 # pytorch for neural network
 import torch
@@ -12,6 +13,8 @@ from torch.utils.data import DataLoader, TensorDataset, WeightedRandomSampler
 # sklearn
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+
+tqdm = partial(tqdm, position=0, leave=False)
 
 
 # download file from url
@@ -67,7 +70,7 @@ def normalize(inputs):    #channel wise normalization
 def get_weights(target):
   class_sample_index, class_sample_count = np.unique(target, return_counts=True)
   weight = 1. / class_sample_count
-  samples_weight = np.array([weight[class_sample_index==t][0] for t in tqdm(target, leave=False)])
+  samples_weight = np.array([weight[class_sample_index==t][0] for t in tqdm(target)])
   samples_weight = torch.from_numpy(samples_weight)
   return samples_weight
 
