@@ -42,6 +42,9 @@ def trainNet(net,criterion,optimizer,data_loaders,epochs, check_every=None,early
 
         # zero the parameter gradients
         optimizer.zero_grad()
+        # for LSTM
+        if hasattr(net,'init_hidden'):
+          net.hidden = net.init_hidden(inputBatch.shape[0]) # detaching it from its history on the last instance.
 
         # forward
         outputBatch = net(inputBatch)
@@ -60,6 +63,10 @@ def trainNet(net,criterion,optimizer,data_loaders,epochs, check_every=None,early
 
           inputBatch = inputBatch.to(device).float()
           labelBatch = labelBatch.to(device)
+
+          # for LSTM
+          if hasattr(net,'init_hidden'):
+            net.hidden = net.init_hidden(inputBatch.shape[0]) # detaching it from its history on the last instance.
 
           # forward
           outputBatch = net(inputBatch)
@@ -131,6 +138,10 @@ def get_predn(net, loader, predict_fn='max'):
 
       inputBatch = inputBatch.to(device).float()
       outTrue.extend(outTrueBatch.cpu())
+
+      # for LSTM
+      if hasattr(net,'init_hidden'):
+        net.hidden = net.init_hidden(inputBatch.shape[0]) # detaching it from its history on the last instance.
 
       # forward
       if predict_fn == 'max':

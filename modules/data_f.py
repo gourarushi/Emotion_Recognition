@@ -11,7 +11,6 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset, WeightedRandomSampler
 
 # sklearn
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 
 tqdm = partial(tqdm, position=0, leave=False)
@@ -56,15 +55,6 @@ def extract_zip(path_to_zip_file, directory_to_extract_to=None, overwrite=True):
     print("folder extracted from zip")
   else:
     print("zip already extracted")
-
-
-
-def normalize(inputs):    #channel wise normalization
-  n_samples, n_channels = inputs.shape[:2]
-  for input in inputs:
-    for c in range(n_channels):
-      scaler = MinMaxScaler(feature_range=(-1,1)).fit(input[c].reshape(-1,1)) 
-      input[c] = scaler.transform(input[c].reshape(-1,1))[:,0]
 
 
 def get_weights(target):
