@@ -46,7 +46,10 @@ def get_features(inputs, sub_window_size, stride_size):
 
   windows = sliding_window(inputs, sub_window_size=sub_window_size, stride_size=stride_size)
   mean = windows.mean(axis=2)
+  median = np.median(windows, axis=2)
   std = windows.std(axis=2)
+  min_ = windows.min(axis=2)
+  max_ = windows.max(axis=2)
 
-  features = np.vstack((mean, std))
+  features = np.vstack((mean, median, std, min_, max_))
   return features
